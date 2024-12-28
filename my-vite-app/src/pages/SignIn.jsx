@@ -1,76 +1,62 @@
 import  { useState } from 'react';
 import { LockIcon, UserIcon, EyeIcon, EyeOffIcon ,LoaderIcon  } from 'lucide-react';
-import axios from 'axios';
+import { useAuth } from '../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 
-
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/auth',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+// const api = axios.create({
+//   baseURL: 'http://localhost:8080/api/v1/auth',
+//   headers: {
+//     'Content-Type': 'application/json'
+//   }
+// });
 const SignIn = () => {
-  //   const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [error, setError] = useState('');
-
+  
+  const auth = useAuth();
+  const navigate = useNavigate(); // Get navigate function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     setError('');
-    try {
-      const response = await api.post('/authenticate', formData);
-      console.log("jjjjjjjjjjjjjj",formData);
 
-
-      console.log("jjjjjjjjjjjjjj",response.data);
-      
-      // Store the authentication token
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        
-        // Set default authorization header for future requests
-        api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-        
-        // Redirect to dashboard or home page
-        window.location.href = '/dashboard';
+    if (formData.email !== "" && formData.password !== "") {
+      const result = await auth.loginAction(formData);
+      console.log("Login result:", result);
+      if (!result.success) {
+        setError(result.message); // Show the error message if login fails
+      } else {
+        // Navigate to the "hello" page after a successful login
+        navigate("/hello");
       }
-    } catch (err) {
-      setError(
-        err.response?.data?.message || 
-        'Failed to login. Please check your credentials and try again.'
-      );
-    } finally {
-      setIsLoading(false);
+    } else {
+      alert("Please provide a valid email and password");
     }
-
-      // Add login logic here
-    // console.log('Login attempted with:', { username, password });
+  
+    setIsLoading(false);
   };
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
       [name]: value
     }));
+    
     // Clear any previous errors when user starts typing
     if (error) setError('');
   };
+
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full ove rflow-hidden">
+      <div className="bg-white rounded-2xl max-w-md w-full overflow-hidden">
         <div className="p-8 space-y-6">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
@@ -125,14 +111,14 @@ const SignIn = () => {
                 ) : (
                   <EyeIcon className="h-5 w-5 text-gray-400" />
                 )}
-
-                  </button>
+              </button>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-900 text-white py-3 rounded-lg hover:opacity-90 transition duration-300 transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-blue-900 text-white py-3 rounded-lg hover:opacity-90 transition duration-300 transform hover:scale-[1.01]
+              active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isLoading ? (
                 <>
@@ -160,9 +146,6 @@ const SignIn = () => {
       </div>
     </div>
   );
-  
-  
-              
 }
 
-export default SignIn
+export default SignIn;
