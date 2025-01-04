@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn";
 import Helloworld from "./pages/Helloworld";
 import {AuthProvider}  from './context/AuthProvider';
 import Layout from "./components/Layout";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,8 @@ const router = createBrowserRouter(
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="hello" element={<Helloworld />} />
+          <Route path="dashboard" element={<Dashboard />} />
+
         </Route>
       </Route>
     </Route>

@@ -36,9 +36,10 @@ export const AuthProvider = ({ children }) => {
   
         // Set the Authorization header for future requests
         axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+  
         const userResponse = await axios.get("http://localhost:8080/api/v1/user/me");
         console.log("User data:", userResponse.data);
-        setUser(userResponse.data);
+        setUser(userResponse.data);  // Make sure this sets user correctly
   
         return { success: true, message: "Login successful" };
       } else {
@@ -49,6 +50,7 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: error.response?.data.message || "Login failed" };
     }
   };
+  
   
 
   const logOut = async (navigate) => {

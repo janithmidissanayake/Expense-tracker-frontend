@@ -34,7 +34,7 @@ const SignIn = () => {
         setError(result.message); // Show the error message if login fails
       } else {
         // Navigate to the "hello" page after a successful login
-        navigate("/hello");
+        navigate("/dashboard");
       }
     } else {
       alert("Please provide a valid email and password");

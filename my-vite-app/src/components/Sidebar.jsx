@@ -22,8 +22,8 @@ const Sidebar = () => {
     };
 
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', badge: null },
-    { icon: PieChart, label: 'Analytics', badge: null },
+    { icon: LayoutDashboard, label: 'Dashboard', badge: null,action: () => navigate('/dashboard') },
+    { icon: PieChart, label: 'Analytics', badge: null,action: () => navigate('/hello') },
     { icon: Tags, label: 'Categories', badge: null },
     { icon: Wallet, label: 'Budgets', badge: '3' },
     { icon: Users, label: 'Split Expenses', badge: null },
