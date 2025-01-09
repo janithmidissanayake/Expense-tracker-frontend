@@ -4,7 +4,7 @@ import axios from 'axios'; // Import Axios
 
 import { Card, Col, Row, Statistic } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined, WalletOutlined } from '@ant-design/icons';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const Dashboard = () => {
   const { user } = useAuth(); // Access the user data from AuthContext
@@ -16,10 +16,44 @@ const Dashboard = () => {
     totalIncome:0,
     totalExpense:0,
     balance:0
-  }
+  });
 
-  );
+  const [incomeCategoryData, setIncomeCategoryData] = useState([]);
+  const [expenseCategoryData, setExpenseCategoryData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]); // State for graph data
+
+  useEffect(() => {
+    if (userId) {  // Only fetch data if userId exists
+      const fetchIncomeCategoryData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/v1/summary-controller/category-IncomeSummary?userId=${userId}`);
+          console.log("incomeCategoryData:", response.data);
+          setIncomeCategoryData(response.data);
+          // console.log("incomeCategoryData"+response.data);
+          console.log("incomeCategoryData"+incomeCategoryData);
+        } catch (error) {
+          console.error('Error fetching income category data:', error.response?.data || error.message);
+        }
+      };
+      fetchIncomeCategoryData();
+    }
+  }, [userId, incomeCategoryData]);  // Re-run the effect whenever userId or incomeCategoryData changes
+
+  useEffect(() => {
+    if (userId) {  // Only fetch data if userId exists
+      const fetchExpenseCategoryData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/v1/summary-controller/category-ExpenseSummary?userId=${userId}`);
+          setExpenseCategoryData(response.data);
+        } catch (error) {
+          console.error('Error fetching expense category data:', error.response?.data || error.message);
+        }
+      };
+      fetchExpenseCategoryData();
+    }
+  }, [userId]);
+
+
     
 
     useEffect(() => {
@@ -50,18 +84,9 @@ const Dashboard = () => {
       }
     }, [userId]);
   
-    
-    // const data = [
-    //     { month: 'Jan', income: 4500, expense: 3200, balance: 1300 },
-    //     { month: 'Feb', income: 5200, expense: 3800, balance: 1400 },
-    //     { month: 'Mar', income: 4800, expense: 3500, balance: 1300 },
-    //     { month: 'Apr', income: 6000, expense: 4200, balance: 1800 },
-    //     { month: 'May', income: 5500, expense: 3900, balance: 1600 }
-    //   ];
-    
-    //   const totalIncome = data.reduce((sum, item) => sum + item.income, 0);
-    //   const totalExpense = data.reduce((sum, item) => sum + item.expense, 0);
-    //   const currentBalance = totalIncome - totalExpense;
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF4560', '#775DD0'];
+ 
+   
   return (
     <div>
         <div>
@@ -105,6 +130,60 @@ const Dashboard = () => {
       </Row>
 
         </div>
+
+    <div className="mt-4">
+  <Row gutter={16}>
+    <Col xs={24} md={12}>
+      <Card title="Income Category Breakdown">
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={incomeCategoryData}
+              dataKey="percentage"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              fill="#3f8600"
+              label
+            >
+              {incomeCategoryData.map((entry, index) => (
+                <Cell key={`income-cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </Card>
+    </Col>
+    <Col xs={24} md={12}>
+      <Card title="Expense Category Breakdown">
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={expenseCategoryData}
+              dataKey="percentage"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              fill="#cf1322"
+              label
+            >
+              {expenseCategoryData.map((entry, index) => (
+                <Cell key={`expense-cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </Card>
+    </Col>
+  </Row>
+</div>
+
 
         <div className='mt-4'>
         <Card title="Financial Overview">

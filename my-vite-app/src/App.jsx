@@ -10,6 +10,8 @@ import Helloworld from "./pages/Helloworld";
 import {AuthProvider}  from './context/AuthProvider';
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
+import Income from "./pages/Income";
+import Expense from "./pages/Expense";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +26,11 @@ const router = createBrowserRouter(
         <Route element={<Layout />}>
           <Route path="hello" element={<Helloworld />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="income" element={<Income  />} />
+          <Route path="income" element={<Income  />} />
+          <Route path="expense" element={<Expense />} />
+
+
 
         </Route>
       </Route>
