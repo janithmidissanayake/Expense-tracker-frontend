@@ -26,7 +26,7 @@ const Sidebar = () => {
     { icon: PieChart, label: 'Analytics', badge: null,action: () => navigate('/hello') },
     { icon: Tags, label: 'Categories', badge: null,action: () => navigate('/income') },
     { icon: Wallet, label: 'Budgets', badge: '3',action: () => navigate('/expense') },
-    { icon: Users, label: 'Split Expenses', badge: null },
+    { icon: Users, label: 'Split Expenses', badge: null ,action: () => navigate('/category')},
     { icon: Settings, label: 'logout', badge: null,action: handleLogout },
   ];
   return (

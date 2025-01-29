@@ -12,6 +12,7 @@ import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Income from "./pages/Income";
 import Expense from "./pages/Expense";
+import CategoryPage from "./pages/CategoryPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,9 +30,7 @@ const router = createBrowserRouter(
           <Route path="income" element={<Income  />} />
           <Route path="income" element={<Income  />} />
           <Route path="expense" element={<Expense />} />
-
-
-
+          <Route path="category" element={<CategoryPage />} />
         </Route>
       </Route>
     </Route>
