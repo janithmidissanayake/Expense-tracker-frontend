@@ -48,6 +48,8 @@ const Expense = () => {
      
      <ExpenseTable 
        expenseData={expenseData}
+       onUpdateExpense={setExpenseData}
+
     //    onEdit={handleEdit}
     //    onDelete={handleDelete}
      />

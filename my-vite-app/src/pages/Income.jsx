@@ -7,6 +7,7 @@ import axios from 'axios'; // Import Axios
  
  const Income = () => {
     const [incomeData, setIncomeData] = useState([]);
+
     const {user} = useAuth();
     const userId = user?.id;
     console.log("hhhhhhhh"+userId);
@@ -30,6 +31,8 @@ import axios from 'axios'; // Import Axios
     }, [userId]);
 
     
+
+    
    return (
      <div><div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
      <div className="mb-6">
@@ -40,14 +43,15 @@ import axios from 'axios'; // Import Axios
      </div>
      
      <IncomeForm 
-    //    onSubmit={handleAddIncome}
-    //    initialData={editingIncome}
+    //  initialData={editingIncome} onSubmit={handleUpdateIncome}
+   
      />
      
      <IncomeTable 
        incomeData={incomeData}
-    //    onEdit={handleEdit}
-    //    onDelete={handleDelete}
+       onUpdateIncomes={setIncomeData}
+
+     
      />
    </div></div>
    )
